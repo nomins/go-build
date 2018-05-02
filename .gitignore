@@ -1,0 +1,11 @@
+# IDE
+.vscode
+.idea
+*.iml
+
+# JS
+node_modules/
+
+# Build
+target/
+build/
