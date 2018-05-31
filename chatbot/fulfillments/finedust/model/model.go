@@ -14,7 +14,7 @@ type DialogflowRequest struct {
 		} `json:"parameters"`
 		AllRequiredParamsPresent bool `json:"allRequiredParamsPresent"`
 		FulfillmentText string `json:"fulfillmentText"`
-		FulfillmentMessages []fulfillmentMessage `json:"fulfillmentMessages"`
+		FulfillmentMessages []FulfillmentMessage `json:"fulfillmentMessages"`
 		Intent struct {
 			Name string `json:"name"`
 			DisplayName string `json:"displayName"`
@@ -31,8 +31,61 @@ type DialogflowRequest struct {
 	Session string `json:"session"`
 }
 
-type fulfillmentMessage struct {
+type FulfillmentMessage struct {
 	Text struct {
 		Text []string `json:"text"`
 	} `json:"text"`
+	Card struct {
+		Title string `json:"title"`
+		Subtitle string `json:"subtitle"`
+		ImageUri string `json:"imageUri"`
+		Buttons []Button `json:"buttons"`
+	}
+}
+
+type Button struct {
+	Text string `json:"text"`
+	Postback string `json:"postback"`
+}
+
+type DialogflowResponse struct {
+	FulfillmentText string `json:"fulfillmentText"`
+	FulfillmentMessages []FulfillmentMessage `json:"fulfillmentMessages"`
+	Source string `json:"source"`
+	Payload struct {
+		Google struct {
+			ExpectUserResponse bool `json:"expectUserResponse"`
+			RichResponse struct {
+				Items []Item `json:"items"`
+			} `json:"richResponse"`
+		} `json:"google"`
+		Facebook struct {
+			Text string `json:"text"`
+		} `json:"facebook"`
+		Slack struct {
+			Text string `json:"text"`
+		} `json:"slack"`
+	} `json:"payload"`
+	OutputContexts []OutputContext `json:"outputContexts"`
+	FollowupEventInput struct {
+		Name string `json:"name"`
+		LanguageCode string `json:"languageCode"`
+		Parameters struct {
+			Param string `json:"param"`
+		} `json:"parameters"`
+	} `json:"followupEventInput"`
+}
+
+type Item struct {
+	SimpleResponse struct {
+		TextToSpeech string `json:"textToSpeech"`
+	} `json:"simpleResponse"`
+}
+
+type OutputContext struct {
+	Name string `json:"name"`
+	LifespanCount int `json:"lifespanCount"`
+	Parameters struct {
+		Param string `json:"param"`
+	} `json:"parameters"`
 }

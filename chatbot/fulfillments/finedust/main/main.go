@@ -20,10 +20,20 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Parsed JSON Body: %+v", dialogflowRequest)
 
+	body := &model.DialogflowResponse {
+		FulfillmentText: "Today is fine",
+	}
+
+	bodyJson, err := json.Marshal(body)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, err
+	}
+
 	return events.APIGatewayProxyResponse{
-		Body: request.Body,
+		Body: string(bodyJson),
 		StatusCode: 200,
 	}, nil
+
 }
 
 
