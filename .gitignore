@@ -3,9 +3,16 @@
 .idea
 *.iml
 
-# JS
-node_modules/
-
-# Build
+# Artifact
+bin/
 target/
 build/
+*.zip
+*.war
+
+# Module
+node_modules/
+vendor/
+
+# Serverless
+.serverless
