@@ -8,7 +8,6 @@ import (
 	"go-build/chatbot/fulfillments/finedust/model"
 )
 
-
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	fmt.Println("Received body: ", request.Body)
 
@@ -33,6 +32,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		Body: string(bodyJson),
 		StatusCode: 200,
 	}, nil
+
+	return events.APIGatewayProxyResponse{
+		Body: "coffee~!",
+		StatusCode: 200,
+	}, nil
+	//return events.APIGatewayProxyResponse{}, errors.New("my Error")
 
 }
 
