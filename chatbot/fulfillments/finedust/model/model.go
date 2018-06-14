@@ -1,12 +1,7 @@
 package model
 
 type QueryParameter struct {
-	Name string `json:"name"`
-	DateTime struct {
-		StartDateTime string `json:"startDateTime"`
-		EndDateTime string `json:"endDateTime"`
-		DateTime string `json:"date_time"`
-	} `json:"date-time"`
+	Province string `json:"province"`
 	DustType string `json:"dust-type"`
 }
 
@@ -53,24 +48,28 @@ type Button struct {
 	Postback string `json:"postback"`
 }
 
+type Payload struct {
+	Google struct {
+		ExpectUserResponse bool `json:"expectUserResponse"`
+		RichResponse struct {
+			Items []Item `json:"items"`
+		} `json:"richResponse"`
+	} `json:"google"`
+	Facebook struct {
+		Text string `json:"text"`
+	} `json:"facebook"`
+	Slack `json:"slack"`
+}
+
+type Slack struct {
+	Text string `json:"text"`
+}
+
 type DialogflowResponse struct {
 	FulfillmentText string `json:"fulfillmentText"`
 	FulfillmentMessages []FulfillmentMessage `json:"fulfillmentMessages"`
 	Source string `json:"source"`
-	Payload struct {
-		Google struct {
-			ExpectUserResponse bool `json:"expectUserResponse"`
-			RichResponse struct {
-				Items []Item `json:"items"`
-			} `json:"richResponse"`
-		} `json:"google"`
-		Facebook struct {
-			Text string `json:"text"`
-		} `json:"facebook"`
-		Slack struct {
-			Text string `json:"text"`
-		} `json:"slack"`
-	} `json:"payload"`
+	Payload `json:"payload"`
 	OutputContexts []OutputContext `json:"outputContexts"`
 	FollowupEventInput struct {
 		Name string `json:"name"`
@@ -93,4 +92,13 @@ type OutputContext struct {
 	Parameters struct {
 		Param string `json:"param"`
 	} `json:"parameters"`
+}
+
+type FineDustInfo struct {
+	FineDusts []*struct {
+		DateTime string `json:"dateTime"`
+		Province string `json:"province"`
+		Figure string `json:"figure"`
+		Status string `json:"status"`
+	}
 }

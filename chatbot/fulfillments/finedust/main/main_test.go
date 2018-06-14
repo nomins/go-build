@@ -2,19 +2,33 @@ package main
 
 import (
 	"testing"
-	"github.com/aws/aws-lambda-go/events"
+	"go-build/chatbot/fulfillments/finedust/model"
+	"encoding/json"
 )
 
 func TestSum (t *testing.T) {
-	testRequest := events.APIGatewayProxyRequest{
-		Body: "This is a test body.",
+	queryText := "서울 미세먼지 어때요?"
+	parameters := model.QueryParameter{
+		Province: "서울",
+		DustType: "미세먼지",
 	}
-	//
-	response, err := Handler(testRequest)
+
+	apiGwRequest := model.BuildAPIGatewayProxyRequest(queryText, parameters)
+
+	apiGwResponse, err := Handler(apiGwRequest)
 	if err != nil {
 		t.Error(err)
 	}
 
-	t.Log(response.Body)
+	if apiGwResponse.StatusCode != 200 {
+		t.Errorf("StatusCode는 200이어야 합니다. (actual: %d, expected: %d)",
+			apiGwResponse.StatusCode, 200)
+	}
 
+	var body model.DialogflowResponse
+
+	err = json.Unmarshal([]byte(apiGwResponse.Body), &body)
+	if err != nil {
+		t.Error(err)
+	}
 }

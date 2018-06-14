@@ -7,18 +7,18 @@ import (
 )
 
 func BuildAPIGatewayProxyRequest(input string, parameters QueryParameter) events.APIGatewayProxyRequest {
-	 requestJson := buildFulfillmentRequest(input, parameters)
+	requestJson := buildFulfillmentRequest(input, parameters)
 
 	return events.APIGatewayProxyRequest{
 		Body: string(requestJson),
 	}
 }
 
-func buildFulfillmentRequest(input string, parameters QueryParameter) []byte {
+func buildFulfillmentRequest(queryText string, parameters QueryParameter) []byte {
 	request := DialogflowRequest{
 		ResponseId: "fakeResponseId",
 		QueryResult: QueryResult{
-			QueryText: input,
+			QueryText:  queryText,
 			Parameters: parameters,
 		},
 	}
