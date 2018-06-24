@@ -14,24 +14,25 @@
     <!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
     <!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 </head>
 
 <body>
-    <div class="center-block">
-        <select name="" id="" class="form-control">
+    <div>
+        <select class="form-control">
             <option>서울</option>
             <option>경기</option>
             <option>인천</option>
             <option>강원</option>
             <option>부산</option>
         </select>
-        <div>
+        <button type="button" class="btn btn-primary">갱신</button>
+        <div id="dateTime">
             6월 2일 토요일 오후 3:49
         </div>
-        <div>
+        <div id="status">
             좋음
         </div>
         <img src="http://simpleicon.com/wp-content/uploads/smile.png" alt="smile" class="img-circle" style="width: 30px; height: 30px;">
@@ -41,6 +42,67 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
     <script src="js/bootstrap.min.js"></script>
+    <script>
+        document.querySelector('button').addEventListener('click', function (event) {
+            let data = '{"code": 200,"errorReason": null,"fineDust": {"dateTime": "2018-06-24T23:47:00","province": "서울","figure": 300,"status": "best"}}';
+            let dataObject = JSON.parse(data);
+            let fineDustObject = dataObject.fineDust;
+            // 날짜 변경
+            let dateTime = fineDustObject.dateTime;
+            document.getElementById('dateTime').innerHTML = getDateTimeString(dateTime);
+            // 상태 변경
+            let status = fineDustObject.status;
+            document.getElementById('status').innerHTML = getStatusString(status);
+
+        });
+        function getStatusString(status) {
+            let statusArray = ['best', 'good', 'normal', 'bad', 'worst'];
+            let changeStatusString = ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'];
+            for (let i = 0; i < statusArray.length; i++) {
+                let name = statusArray[i];
+                if (name === status) {
+                    return changeStatusString[i];
+                }
+            }
+        }
+        // 날짜 문자열 반환
+        function getDateTimeString(dateTime) {
+            let date = new Date(dateTime);
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let weekday = date.getDay();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            return month + '월 ' + day + '일 ' + getWeekdayString(weekday) + '요일 ' + getAmPmString() + ' ' + hour + ':' + minute;
+        }
+        // 요일 문자열 반환
+        function getWeekdayString(weekdayNumber) {
+            switch (weekdayNumber) {
+                case 0:
+                    return '일';
+                case 1:
+                    return '월';
+                case 2:
+                    return '화';
+                case 3:
+                    return '수';
+                case 4:
+                    return '목';
+                case 5:
+                    return '금';
+                case 6:
+                    return '토';
+            }
+        }
+        // 오전/오후 문자열 반환
+        function getAmPmString(hour) {
+            if (hour >= 0 && hour <= 12) {
+                return '오전';
+            } else {
+                return '오후';
+            }
+        }
+    </script>
 </body>
 
 </html>
