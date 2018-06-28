@@ -49,6 +49,43 @@ public class FineDustWrapper {
     }
 
     public String getStatus() {
-        return status;
+        double figure = getFigure();
+
+        if(level.equalsIgnoreCase("detail")){
+            return pm25Standard(figure);
+        }else{
+            return pm10Standard(figure);
+        }
+    }
+
+    public String pm25Standard(double figure) {
+        if(figure <= 15){
+            return "good";
+        }
+        else if(figure <= 25){
+            return "normal";
+        }
+        else if(figure <= 50){
+            return "bad";
+        }
+        else{
+            return "worst";
+        }
+    }
+
+
+    public String pm10Standard(double figure) {
+        if(figure <= 30){
+            return "good";
+        }
+        else if(figure <= 50){
+            return "normal";
+        }
+        else if(figure <= 100){
+            return "bad";
+        }
+        else{
+            return "worst";
+        }
     }
 }
