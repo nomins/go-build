@@ -41,7 +41,8 @@
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-    <script src="js/bootstrap.min.js"></script>
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script>
         document.querySelector('button').addEventListener('click', function (event) {
             let data = '{"code": 200,"errorReason": null,"fineDust": {"dateTime": "2018-06-24T23:47:00","province": "서울","figure": 300,"status": "best"}}';
@@ -55,52 +56,35 @@
             document.getElementById('status').innerHTML = getStatusString(status);
 
         });
-        function getStatusString(status) {
-            let statusArray = ['best', 'good', 'normal', 'bad', 'worst'];
-            let changeStatusString = ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'];
-            for (let i = 0; i < statusArray.length; i++) {
-                let name = statusArray[i];
-                if (name === status) {
-                    return changeStatusString[i];
-                }
-            }
-        }
         // 날짜 문자열 반환
         function getDateTimeString(dateTime) {
-            let date = new Date(dateTime);
-            let month = date.getMonth() + 1;
-            let day = date.getDate();
-            let weekday = date.getDay();
-            let hour = date.getHours();
-            let minute = date.getMinutes();
-            return month + '월 ' + day + '일 ' + getWeekdayString(weekday) + '요일 ' + getAmPmString() + ' ' + hour + ':' + minute;
+            const date = moment(dateTime);
+            const hour = date.hour();
+            const weekday = date.weekday();
+            return date.format(`M월 D일 ${getWeekdayString(weekday)}요일 ${getAmPmString(hour)} HH:mm`);
         }
         // 요일 문자열 반환
         function getWeekdayString(weekdayNumber) {
-            switch (weekdayNumber) {
-                case 0:
-                    return '일';
-                case 1:
-                    return '월';
-                case 2:
-                    return '화';
-                case 3:
-                    return '수';
-                case 4:
-                    return '목';
-                case 5:
-                    return '금';
-                case 6:
-                    return '토';
-            }
+            const weekdayObject = { 0: '일', 1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토' };
+            return weekdayObject[weekdayNumber];
         }
         // 오전/오후 문자열 반환
         function getAmPmString(hour) {
-            if (hour >= 0 && hour <= 12) {
-                return '오전';
-            } else {
-                return '오후';
+            return (hour >= 0 && hour <= 12) ? '오전' : '오후';
+        }
+        // 상태에 따른 문자열 반환
+        function getStatusString(status) {
+            if (status == null) {
+                return;
             }
+            const statuses = {
+                'best': '매우 좋음',
+                'good': '좋음',
+                'normal': '보통',
+                'bad': '나쁨',
+                'worst': '매우 나쁨'
+            };
+            return statuses[status];
         }
     </script>
 </body>
